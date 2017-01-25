@@ -7,7 +7,6 @@ JointStateSampler::JointStateSampler()
 {
 	m_collision = new Manipulation::CollisionPairSeq();
 }
-
 JointStateSampler::~JointStateSampler(){
 }
 
@@ -66,19 +65,21 @@ bool JointStateSampler::planWithSimpleSetup(const Manipulation::JointAngleSeq& s
 		bounds.setHigh(i, m_jointLimits[i].max);
 	}
 	space->as<ob::RealVectorStateSpace>()->setBounds(bounds);
-
 	og::SimpleSetupPtr sampler(new og::SimpleSetup(space));
 
 	sampler->setStateValidityChecker(boost::bind(&JointStateSampler::isStateValid, this, _1));
-
 	//Set start and goal states
 	assert(startJointAngleSeq.length()==goalJointAngleSeq.length());
+	m_jointNum =7;
+	std::cout << m_jointNum <<std::endl;
 	ob::ScopedState<ob::RealVectorStateSpace> start(space);
 	for (int i = 0; i < m_jointNum-1; ++i){
+	  std::cout << i<<std::endl;
 		start->as<ob::RealVectorStateSpace::StateType>()->values[i] = startJointAngleSeq[i].data;
 	}
 	ob::ScopedState<ob::RealVectorStateSpace> goal(space);
 	for (int i = 0; i < m_jointNum-1; ++i){
+	  	  std::cout << i<<std::endl;
 		goal->as<ob::RealVectorStateSpace::StateType>()->values[i] = goalJointAngleSeq[i].data;
 	}
 	sampler->setStartAndGoalStates(start, goal);
