@@ -56,6 +56,7 @@ bool JointStateSampler::isStateValid(const ob::State *state)
 bool JointStateSampler::planWithSimpleSetup(const Manipulation::JointAngleSeq& startJointAngleSeq, const Manipulation::JointAngleSeq& goalJointAngleSeq,
 											Manipulation::ManipulationPlan_out manipPlan)
 {
+        m_jointNum = 7;
 	ob::StateSpacePtr space(new ob::RealVectorStateSpace(m_jointNum-1));
 
 	//Set joint limits
@@ -68,9 +69,9 @@ bool JointStateSampler::planWithSimpleSetup(const Manipulation::JointAngleSeq& s
 	og::SimpleSetupPtr sampler(new og::SimpleSetup(space));
 
 	sampler->setStateValidityChecker(boost::bind(&JointStateSampler::isStateValid, this, _1));
+
 	//Set start and goal states
 	assert(startJointAngleSeq.length()==goalJointAngleSeq.length());
-	m_jointNum =7;
 	std::cout << m_jointNum <<std::endl;
 	ob::ScopedState<ob::RealVectorStateSpace> start(space);
 	for (int i = 0; i < m_jointNum-1; ++i){
